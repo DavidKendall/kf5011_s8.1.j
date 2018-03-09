@@ -1,4 +1,3 @@
-
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -12,7 +11,7 @@ public class House extends JFrame implements Runnable {
     public static final long serialVersionUID = 2L;
     public static void main ( String[] args ) throws SocketException {
         SwingUtilities.invokeLater( new Runnable() {
-            public void run() { new House(); }
+            public void run() { new House(args[0], Integer.parseInt(args[1])); }
         } );
     }
 
@@ -20,19 +19,15 @@ public class House extends JFrame implements Runnable {
     GraphPanel plots = new GraphPanel(new Dimension(400,200));
     DatagramPanel receive = new DatagramPanel();
 
-    public House() {
+    public House(String ipAddress, int portNumber) {
         super("House Heating");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JPanel content = new JPanel( );
         content.setLayout( new BoxLayout( content, BoxLayout.Y_AXIS) );
 
-        try {
-            receive.setAddress(InetAddress.getLocalHost().getHostAddress(), false);
-           receive.setPort(65280, false);
-        }catch(UnknownHostException e){
-            System.err.println(e.getMessage());
-        }
+        receive.setAddress(ipAddress, false);
+        receive.setPort(portNumber, false);
         content.add(receive);
 
         content.add( heatingsys );
